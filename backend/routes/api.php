@@ -16,3 +16,4 @@ Route::apiResource('enrollments', EnrollmentController::class)->except(['show'])
 // Route::get('/enrollments/export', [EnrollmentController::class, 'export']);
 Route::put('/enrollments/{id}', [EnrollmentController::class, 'update']);
 Route::delete('/enrollments/{id}', [EnrollmentController::class, 'destroy']);
+

@@ -8,8 +8,15 @@ class QueryCompiler
 {
     // Whitelist kolom yang diizinkan untuk sorting dan filtering (mencegah SQL Injection)
     protected static array $allowedColumns = [
-        'id', 'student_nim', 'student_name', 'course_code', 
-        'course_name', 'academic_year', 'semester', 'status', 'created_at'
+        'id',
+        'student_nim',
+        'student_name',
+        'course_code',
+        'course_name',
+        'academic_year',
+        'semester',
+        'status',
+        'created_at'
     ];
 
     public static function apply(Builder $query, array $params): Builder
@@ -19,8 +26,8 @@ class QueryCompiler
             $search = '%' . $params['search'] . '%';
             $query->where(function ($q) use ($search) {
                 $q->where('student_nim', 'ILIKE', $search)
-                  ->orWhere('student_name', 'ILIKE', $search)
-                  ->orWhere('course_code', 'ILIKE', $search);
+                    ->orWhere('student_name', 'ILIKE', $search)
+                    ->orWhere('course_code', 'ILIKE', $search);
             });
         }
 
@@ -42,6 +49,7 @@ class QueryCompiler
         }
 
         // 4. Sorting Multi Kolom
+        // 4. Sorting (Mendukung format JSON multi-sort atau parameter tunggal sort_by/sort_dir)
         if (!empty($params['sort']) && is_string($params['sort'])) {
             $sorts = json_decode($params['sort'], true);
             if (is_array($sorts)) {
@@ -53,8 +61,13 @@ class QueryCompiler
                     }
                 }
             }
+        } elseif (!empty($params['sort_by']) && in_array($params['sort_by'], self::$allowedColumns)) {
+            // Tambahan dukungan untuk parameter URL standar (?sort_by=kolom&sort_dir=asc)
+            $field = $params['sort_by'];
+            $dir = strtolower($params['sort_dir'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+            $query->orderBy($field, $dir);
         } else {
-            // Default sorting
+            // Default sorting jika tidak ada parameter sort sama sekali
             $query->orderBy('id', 'desc');
         }
 
