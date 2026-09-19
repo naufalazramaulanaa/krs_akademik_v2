@@ -35,9 +35,31 @@ class EnrollmentController extends Controller
         $this->deleteAction = $deleteAction;
     }
 
+    /**
+     * Helper privat untuk decode query parameter filter & sort jika dikirim sebagai JSON string dari Frontend (Next.js)
+     */
+    private function parseQueryParams(Request $request): array
+    {
+        $params = $request->all();
+
+        if (isset($params['filter']) && is_string($params['filter'])) {
+            $params['filter'] = json_decode($params['filter'], true);
+        }
+
+        if (isset($params['sort']) && is_string($params['sort'])) {
+            $params['sort'] = json_decode($params['sort'], true);
+        }
+
+        return $params;
+    }
+
     public function index(Request $request)
     {
-        $result = $this->queryService->getPaginatedList($request->all());
+        // Parse params agar format filter & sort berupa Array murni
+        $params = $this->parseQueryParams($request);
+
+        $result = $this->queryService->getPaginatedList($params);
+
         return $this->success($result['data'], 'Data KRS berhasil diambil.', 200, $result['meta']);
     }
 
@@ -97,8 +119,13 @@ class EnrollmentController extends Controller
         set_time_limit(0);
         @ini_set('memory_limit', '512M');
 
+        // Parse params JSON string dari Frontend
+        $params = $this->parseQueryParams($request);
+
         $query = DB::table('enrollments')->whereNull('deleted_at');
-        QueryCompiler::apply($query, $request->all());
+        
+        // Terapkan QueryCompiler menggunakan array params yang sudah di-parse
+        QueryCompiler::apply($query, $params);
 
         $sql = $query->toSql();
         $bindings = $query->getBindings();

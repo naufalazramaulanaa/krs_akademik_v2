@@ -22,7 +22,7 @@ class EnrollmentQueryService
             $query = DB::table('enrollments')->whereNull('deleted_at');
             QueryCompiler::apply($query, $params);
 
-            $pageSize = $params['page_size'] ?? ($params['per_page'] ?? 25);
+            $pageSize = $params['pageSize'] ?? ($params['page_size'] ?? ($params['per_page'] ?? 25));
             $page = $params['page'] ?? 1;
 
             $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
