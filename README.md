@@ -14,7 +14,7 @@ Aplikasi Manajemen KRS & Enrollment mahasiswa yang dirancang untuk menangani dat
 ### 1. Backend Setup (Laravel)
 ```bash
 # Clone repository
-git clone <URL_REPOSITORY_KAMU>
+git clone <(https://github.com/naufalazramaulanaa/krs_akademik_v2.git)>
 cd backend
 
 # Install dependencies
