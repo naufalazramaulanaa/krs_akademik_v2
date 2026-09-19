@@ -1,0 +1,17 @@
+# OS Junk Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary Files
+*.tmp
+*.log
+
+#private
+spesifikasi-tes-teknis-web-developer.md
