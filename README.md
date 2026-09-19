@@ -11,7 +11,7 @@ Aplikasi Manajemen KRS & Enrollment mahasiswa yang dirancang untuk menangani dat
 * Node.js >= 18 & npm/pnpm/bun
 * MySQL / PostgreSQL Database
 
-### 1. Backend Setup (Laravel)
+### 1. Backend Setup (Laravel) & Next JS
 ```bash
 # Clone repository
 git clone <(https://github.com/naufalazramaulanaa/krs_akademik_v2.git)>
@@ -31,3 +31,17 @@ php artisan key:generate
 
 # Jalankan server
 php artisan serve
+
+-------------------------------
+
+cd frontend
+
+# Install dependencies
+npm install
+
+# Environment setup
+cp .env.example .env.local
+# Ubah NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+
+# Jalankan server development
+npm run dev
